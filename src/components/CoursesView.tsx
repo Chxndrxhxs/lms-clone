@@ -36,7 +36,7 @@ function relativeTime(timestamp: number): string {
   return `${years} year${years > 1 ? "s" : ""} ago`;
 }
 
-function CourseCard({ course, onOpen, onOpenBuilder }: { course: Course; onOpen: () => void; onOpenBuilder: () => void }) {
+function CourseCard({ course, onOpen, onOpenBuilder, onPreview }: { course: Course; onOpen: () => void; onOpenBuilder: () => void; onPreview: () => void }) {
   const cover = course.cover ?? covers[course.id % covers.length];
   return (
     <div className="rounded-xl border border-gray-200/80 bg-white overflow-hidden shadow-2xs flex flex-col justify-between">
@@ -61,7 +61,7 @@ function CourseCard({ course, onOpen, onOpenBuilder }: { course: Course; onOpen:
         <button onClick={onOpenBuilder} className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Course Builder"><Wrench size={18} /></button>
         <button className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Landing Page Design"><Brush size={18} /></button>
         <button className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Learners"><Users size={18} /></button>
-        <button className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Course Preview"><Eye size={18} /></button>
+        <button onClick={onPreview} className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Course Preview"><Eye size={18} /></button>
         <button className="p-2 text-gray-600 hover:text-indigo-900 rounded-lg hover:bg-white transition-colors" title="Course Discussions"><MessageSquare size={18} /></button>
       </div>
     </div>
@@ -150,6 +150,7 @@ export function CoursesView() {
             course={course}
             onOpen={() => openCourse(course.id)}
             onOpenBuilder={() => navigate(`/courses/${course.id}/builder`)}
+            onPreview={() => navigate(`/courses/${course.id}/preview`)}
           />
         ))}
       </div>

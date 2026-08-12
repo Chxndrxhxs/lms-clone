@@ -68,6 +68,7 @@ class CourseItem(models.Model):
     duration = models.CharField(max_length=50, blank=True, default="")
     file_url = models.CharField(max_length=1000, blank=True, default="")
     file_meta = models.JSONField(null=True, blank=True)
+    quiz_questions = models.JSONField(null=True, blank=True)
     position = models.PositiveIntegerField(default=0)
 
     class Meta:

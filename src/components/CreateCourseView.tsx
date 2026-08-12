@@ -175,7 +175,7 @@ export function CreateCourseView() {
                     </div>
                     <div className="w-1/2">
                       <label className="text-sm font-medium text-[#0F1013] mb-2 block" htmlFor="price">
-                        Discounted price (0% off)*
+                        Discount Amount {mrp && Number(mrp) > 0 && Number(price) > 0 ? `(${Math.round((Number(price) / Number(mrp)) * 100)}% off)` : "(0% off)"}*
                       </label>
                       <div className="flex items-center justify-center rounded border border-[#C9CED3] focus-within:border-[#4E5DE0] bg-white overflow-hidden">
                         <div className="flex items-center justify-center self-stretch border-r border-[#C9CED3] bg-[#F4F6FA]">
@@ -185,12 +185,17 @@ export function CreateCourseView() {
                           className="border outline-none border-transparent pl-4 pr-4 py-3.5 w-full text-sm rounded bg-white"
                           name="price"
                           type="number"
-                          placeholder="Enter discounted price"
+                          placeholder="Enter discount amount"
                           value={price}
                           onChange={(e) => setPrice(e.target.value)}
                         />
                       </div>
                     </div>
+                  </div>
+                  <div className="mt-4 p-4 bg-indigo-50 rounded-lg">
+                    <p className="text-sm font-semibold text-indigo-900">
+                      Final Price: ₹ {Math.max(0, Number(mrp) - Number(price)).toLocaleString()}
+                    </p>
                   </div>
 
                   <div className="flex items-end">

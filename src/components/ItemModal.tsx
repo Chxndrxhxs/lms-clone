@@ -20,6 +20,19 @@ export type ItemType =
   | "coding"
   | "form";
 
+export type QuizOption = {
+  id: string;
+  text: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: QuizOption[];
+  correctOptionId: string;
+  explanation?: string;
+};
+
 export type ItemSubmitData = {
   title: string;
   description?: string;
@@ -29,6 +42,7 @@ export type ItemSubmitData = {
   duration?: string;
   fileMeta?: FileMeta;
   fileData?: string;
+  quizQuestions?: QuizQuestion[];
 };
 
 type ItemModalProps = {
@@ -63,6 +77,20 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
   const [endDate, setEndDate] = useState(initialData?.endDate ?? "");
   const [duration, setDuration] = useState(initialData?.duration ?? "");
   const [file, setFile] = useState<File | null>(null);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>(
+    initialData?.quizQuestions ?? [
+      {
+        id: "1",
+        question: "",
+        options: [
+          { id: "opt_1", text: "" },
+          { id: "opt_2", text: "" },
+        ],
+        correctOptionId: "opt_1",
+        explanation: "",
+      },
+    ]
+  );
 
   const { title: modalTitle, needsUpload } = meta[type];
   const headerTitle = initialData ? modalTitle.replace(/^New /, "Edit ") : modalTitle;
@@ -90,6 +118,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
       duration: duration || undefined,
       fileMeta,
       fileData: fileData ?? initialData?.fileData,
+      quizQuestions: type === "quiz" ? quizQuestions : undefined,
     });
     onClose();
   };
@@ -173,7 +202,167 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
               </div>
             )}
 
-            {(type === "text" || type === "assignment" || type === "coding" || type === "quiz" || type === "form") && (
+            {type === "quiz" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-semibold text-[#0F1013]">Quiz Questions</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newId = Date.now().toString();
+                      const newOptId1 = `opt_${Date.now()}_1`;
+                      const newOptId2 = `opt_${Date.now()}_2`;
+                      setQuizQuestions([
+                        ...quizQuestions,
+                        {
+                          id: newId,
+                          question: "",
+                          options: [
+                            { id: newOptId1, text: "" },
+                            { id: newOptId2, text: "" },
+                          ],
+                          correctOptionId: newOptId1,
+                          explanation: "",
+                        },
+                      ]);
+                    }}
+                    className="rounded-lg bg-[#F2F4FF] px-3 py-1.5 text-xs font-semibold text-[#4E5DE0] hover:bg-[#E8ECFF]"
+                  >
+                    + Add Question
+                  </button>
+                </div>
+
+                {quizQuestions.map((q, qIndex) => (
+                  <div key={q.id} className="rounded-xl border border-[#ECEEEF] bg-[#F8F9FA] p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#393F41]">Question {qIndex + 1}</span>
+                      {quizQuestions.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setQuizQuestions(quizQuestions.filter((item) => item.id !== q.id))}
+                          className="text-xs text-red-600 hover:text-red-800"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        required
+                        className="w-full rounded-lg border border-[#C9CED3] bg-white px-3 py-2 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                        placeholder="Enter question text..."
+                        value={q.question}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setQuizQuestions(
+                            quizQuestions.map((item) => (item.id === q.id ? { ...item, question: val } : item))
+                          );
+                        }}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-medium text-[#6B7280]">Options (Select the correct answer)</label>
+                      {q.options.map((opt, optIndex) => (
+                        <div key={opt.id} className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name={`correct_${q.id}`}
+                            checked={q.correctOptionId === opt.id}
+                            onChange={() => {
+                              setQuizQuestions(
+                                quizQuestions.map((item) =>
+                                  item.id === q.id ? { ...item, correctOptionId: opt.id } : item
+                                )
+                              );
+                            }}
+                            className="accent-[#4E5DE0]"
+                            title="Mark as correct answer"
+                          />
+                          <input
+                            type="text"
+                            required
+                            className="flex-grow rounded-lg border border-[#C9CED3] bg-white px-3 py-1.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                            placeholder={`Option ${optIndex + 1}`}
+                            value={opt.text}
+                            onChange={(e) => {
+                              const text = e.target.value;
+                              setQuizQuestions(
+                                quizQuestions.map((item) =>
+                                  item.id === q.id
+                                    ? {
+                                        ...item,
+                                        options: item.options.map((o) => (o.id === opt.id ? { ...o, text } : o)),
+                                      }
+                                    : item
+                                )
+                              );
+                            }}
+                          />
+                          {q.options.length > 2 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newOpts = q.options.filter((o) => o.id !== opt.id);
+                                let newCorrect = q.correctOptionId;
+                                if (q.correctOptionId === opt.id) {
+                                  newCorrect = newOpts[0]?.id ?? "";
+                                }
+                                setQuizQuestions(
+                                  quizQuestions.map((item) =>
+                                    item.id === q.id ? { ...item, options: newOpts, correctOptionId: newCorrect } : item
+                                  )
+                                );
+                              }}
+                              className="text-xs text-[#9AA1A8] hover:text-red-600 px-1"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {q.options.length < 6 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newOptId = `opt_${Date.now()}_${q.options.length + 1}`;
+                            setQuizQuestions(
+                              quizQuestions.map((item) =>
+                                item.id === q.id
+                                  ? { ...item, options: [...item.options, { id: newOptId, text: "" }] }
+                                  : item
+                              )
+                            );
+                          }}
+                          className="text-xs font-medium text-[#4E5DE0] hover:underline mt-1 block"
+                        >
+                          + Add Option
+                        </button>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        className="w-full rounded-lg border border-[#C9CED3] bg-white px-3 py-1.5 text-xs text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                        placeholder="Explanation (optional, shown after answering)..."
+                        value={q.explanation ?? ""}
+                        onChange={(e) => {
+                          const explanation = e.target.value;
+                          setQuizQuestions(
+                            quizQuestions.map((item) => (item.id === q.id ? { ...item, explanation } : item))
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {(type === "text" || type === "assignment" || type === "coding" || type === "form") && (
               <div>
                 <label className="block text-sm font-medium text-[#0F1013] mb-1.5">Description *</label>
                 {type === "text" ? (

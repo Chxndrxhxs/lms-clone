@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FileText,
   Video,
@@ -42,6 +43,160 @@ const typeIcons: Record<string, LucideIcon> = {
   coding: Code,
   form: ClipboardCheck,
 };
+
+function QuizViewer({ item }: { item: CourseItem }) {
+  const questions = item.quizQuestions ?? [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
+  const [showResults, setShowResults] = useState(false);
+  const [submittedQuestions, setSubmittedQuestions] = useState<Record<string, boolean>>({});
+
+  if (questions.length === 0) {
+    return <Placeholder item={item} />;
+  }
+
+  const q = questions[currentIndex];
+  const selectedOptId = selectedAnswers[q.id];
+  const isSubmitted = submittedQuestions[q.id];
+  const isCorrect = selectedOptId === q.correctOptionId;
+
+  const handleSelectOption = (optId: string) => {
+    if (isSubmitted) return;
+    setSelectedAnswers({ ...selectedAnswers, [q.id]: optId });
+  };
+
+  const handleCheckAnswer = () => {
+    if (!selectedOptId) return;
+    setSubmittedQuestions({ ...submittedQuestions, [q.id]: true });
+  };
+
+  const handleNext = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setShowResults(true);
+    }
+  };
+
+  const handleRetake = () => {
+    setSelectedAnswers({});
+    setSubmittedQuestions({});
+    setCurrentIndex(0);
+    setShowResults(false);
+  };
+
+  if (showResults) {
+    const correctCount = questions.filter((quest) => selectedAnswers[quest.id] === quest.correctOptionId).length;
+    const percentage = Math.round((correctCount / questions.length) * 100);
+
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center space-y-4">
+        <div className="rounded-full bg-[#F2F4FF] p-6 text-[#4E5DE0]">
+          <HelpCircle size={48} />
+        </div>
+        <h3 className="text-xl font-bold text-[#0F1013]">Quiz Completed!</h3>
+        <p className="text-sm text-[#6B7280]">
+          You scored <span className="font-semibold text-[#0F1013]">{correctCount}</span> out of{" "}
+          <span className="font-semibold text-[#0F1013]">{questions.length}</span> ({percentage}%)
+        </p>
+        <button
+          onClick={handleRetake}
+          className="rounded-lg bg-[#4E5DE0] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
+        >
+          Retake Quiz
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 max-w-2xl mx-auto py-4">
+      <div className="flex items-center justify-between text-xs font-semibold text-[#6B7280]">
+        <span>QUESTION {currentIndex + 1} OF {questions.length}</span>
+        <span>{Math.round(((currentIndex + 1) / questions.length) * 100)}% Completed</span>
+      </div>
+
+      <div className="w-full bg-[#ECEEEF] h-1.5 rounded-full overflow-hidden">
+        <div
+          className="bg-[#4E5DE0] h-full transition-all duration-300"
+          style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="rounded-2xl border border-[#ECEEEF] bg-white p-6 shadow-sm space-y-6">
+        <h4 className="text-base font-semibold text-[#0F1013]">{q.question}</h4>
+
+        <div className="space-y-3">
+          {q.options.map((opt) => {
+            const isSelected = selectedOptId === opt.id;
+            const isThisCorrect = opt.id === q.correctOptionId;
+            let optionStyle = "border-[#ECEEEF] bg-white hover:bg-[#F8F9FA]";
+            if (isSubmitted) {
+              if (isThisCorrect) {
+                optionStyle = "border-green-500 bg-green-50 text-green-900 font-medium";
+              } else if (isSelected && !isThisCorrect) {
+                optionStyle = "border-red-500 bg-red-50 text-red-900 font-medium";
+              }
+            } else if (isSelected) {
+              optionStyle = "border-[#4E5DE0] bg-[#F2F4FF] text-[#4E5DE0] font-medium";
+            }
+
+            return (
+              <div
+                key={opt.id}
+                onClick={() => handleSelectOption(opt.id)}
+                className={`flex items-center gap-3 rounded-xl border p-4 cursor-pointer transition-all ${optionStyle}`}
+              >
+                <div
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border text-xs font-bold ${
+                    isSelected ? "border-[#4E5DE0] bg-[#4E5DE0] text-white" : "border-[#C9CED3] text-[#6B7280]"
+                  }`}
+                >
+                  {isSelected ? "✓" : ""}
+                </div>
+                <span className="text-sm">{opt.text}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {isSubmitted && q.explanation && (
+          <div className={`rounded-xl p-4 text-xs ${isCorrect ? "bg-green-50 text-green-800" : "bg-amber-50 text-amber-800"}`}>
+            <span className="font-semibold">Explanation: </span>
+            {q.explanation}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between pt-4 border-t border-[#ECEEEF]">
+          <button
+            disabled={currentIndex === 0}
+            onClick={() => setCurrentIndex(currentIndex - 1)}
+            className="rounded-lg border border-[#ECEEEF] px-4 py-2 text-sm font-medium text-[#393F41] disabled:opacity-40"
+          >
+            Previous
+          </button>
+
+          {!isSubmitted ? (
+            <button
+              disabled={!selectedOptId}
+              onClick={handleCheckAnswer}
+              className="rounded-lg bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8] disabled:opacity-40"
+            >
+              Submit Answer
+            </button>
+          ) : (
+            <button
+              onClick={handleNext}
+              className="rounded-lg bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
+            >
+              {currentIndex < questions.length - 1 ? "Next Question" : "View Results"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Placeholder({ item }: { item: CourseItem }) {
   return (
@@ -127,8 +282,15 @@ export function ItemViewer({ item }: { item: CourseItem }) {
 
         {item.type === "link" && !item.url && <Placeholder item={item} />}
 
-        {(item.type === "quiz" ||
-          item.type === "livetest" ||
+        {item.type === "quiz" && (
+          item.quizQuestions && item.quizQuestions.length > 0 ? (
+            <QuizViewer item={item} />
+          ) : (
+            <Placeholder item={item} />
+          )
+        )}
+
+        {(item.type === "livetest" ||
           item.type === "liveclass" ||
           item.type === "assignment" ||
           item.type === "coding" ||

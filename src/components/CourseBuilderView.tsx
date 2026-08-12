@@ -57,11 +57,25 @@ export function CourseBuilderView() {
   const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [menuItemId, setMenuItemId] = useState<number | null>(null);
+  const [menuChapterId, setMenuChapterId] = useState<number | null>(null);
+  const [editingChapterId, setEditingChapterId] = useState<number | null>(null);
+  const [editingChapterTitle, setEditingChapterTitle] = useState("");
   const [editingItem, setEditingItem] = useState<{ chapterId: number; itemId: number } | null>(null);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [activeItemType, setActiveItemType] = useState<ItemType | null>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDeleteChapter = (chapterId: number) => {
+    updateDraft({
+      chapters: chapters.filter((ch) => ch.id !== chapterId),
+    });
+    if (selectedChapterId === chapterId) {
+      setSelectedChapterId(null);
+      setSelectedItemId(null);
+    }
+    setMenuChapterId(null);
+  };
 
   const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -82,13 +96,17 @@ export function CourseBuilderView() {
   }, [courseId, editingCourseId, startEditCourse, courses]);
 
   useEffect(() => {
-    if (menuItemId == null) return;
-    const close = () => setMenuItemId(null);
+    if (menuItemId == null && menuChapterId == null) return;
+    const close = () => {
+      setMenuItemId(null);
+      setMenuChapterId(null);
+    };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
-  }, [menuItemId]);
+  }, [menuItemId, menuChapterId]);
 
   const openItemModal = (type: ItemType) => {
+    setIsAddItemModalOpen(false);
     setActiveItemType(type);
   };
 
@@ -133,6 +151,7 @@ export function CourseBuilderView() {
           duration: data.duration,
           fileMeta: data.fileMeta,
           fileData: data.fileData,
+          quizQuestions: data.quizQuestions,
         };
         updateChapterItems(
           editingItem.chapterId,
@@ -140,6 +159,8 @@ export function CourseBuilderView() {
         );
       }
       setEditingItem(null);
+      setActiveItemType(null);
+      setIsAddItemModalOpen(false);
       return;
     }
     if (activeItemType === "heading") {
@@ -159,6 +180,7 @@ export function CourseBuilderView() {
         duration: data.duration,
         fileMeta: data.fileMeta,
         fileData: data.fileData,
+        quizQuestions: data.quizQuestions,
       };
       const target = chapters.find((ch) => ch.id === selectedChapterId);
       if (target) {
@@ -166,6 +188,8 @@ export function CourseBuilderView() {
       }
       setSelectedItemId(item.id);
     }
+    setActiveItemType(null);
+    setIsAddItemModalOpen(false);
   };
 
   const selectedItem = selectedItemId != null
@@ -287,20 +311,91 @@ export function CourseBuilderView() {
                           }`}
                         >
                           <div
-                            className={`flex items-center justify-between px-3 py-2.5 cursor-pointer ${
+                            className={`relative flex items-center justify-between px-3 py-2.5 cursor-pointer ${
                               isSelected ? "bg-[#F2F4FF]" : "bg-white hover:bg-[#F8F9FA]"
                             }`}
                             onClick={() => {
                               setSelectedChapterId(chapter.id);
                               setSelectedItemId(null);
                               setMenuItemId(null);
+                              setMenuChapterId(null);
                             }}
                           >
-                            <div className="flex items-center gap-2 min-w-0">
+                            <div className="flex items-center gap-2 min-w-0 flex-grow mr-2">
                               <ChevronDown size={14} className="text-[#9AA1A8] flex-shrink-0" />
-                              <span className="text-sm font-medium text-[#393F41] truncate">{chapter.title}</span>
+                              {editingChapterId === chapter.id ? (
+                                <input
+                                  type="text"
+                                  autoFocus
+                                  className="text-sm font-medium text-[#393F41] bg-white border border-[#4E5DE0] rounded px-2 py-0.5 outline-none w-full"
+                                  value={editingChapterTitle}
+                                  onChange={(e) => setEditingChapterTitle(e.target.value)}
+                                  onBlur={() => {
+                                    if (editingChapterTitle.trim()) {
+                                      updateDraft({
+                                        chapters: chapters.map((ch) =>
+                                          ch.id === chapter.id ? { ...ch, title: editingChapterTitle.trim() } : ch
+                                        ),
+                                      });
+                                    }
+                                    setEditingChapterId(null);
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                      if (editingChapterTitle.trim()) {
+                                        updateDraft({
+                                          chapters: chapters.map((ch) =>
+                                            ch.id === chapter.id ? { ...ch, title: editingChapterTitle.trim() } : ch
+                                          ),
+                                        });
+                                      }
+                                      setEditingChapterId(null);
+                                    } else if (e.key === "Escape") {
+                                      setEditingChapterId(null);
+                                    }
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              ) : (
+                                <span className="text-sm font-medium text-[#393F41] truncate">{chapter.title}</span>
+                              )}
                             </div>
-                            <button className="text-[#9AA1A8] hover:text-[#393F41]">⋮</button>
+                            <button
+                              className="text-[#9AA1A8] hover:text-[#393F41] p-1"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMenuChapterId(menuChapterId === chapter.id ? null : chapter.id);
+                                setMenuItemId(null);
+                              }}
+                              aria-label="Chapter options"
+                            >
+                              ⋮
+                            </button>
+                            {menuChapterId === chapter.id && (
+                              <div
+                                className="absolute right-3 top-full z-20 mt-1 w-32 rounded-lg border border-[#ECEEEF] bg-white py-1 shadow-lg"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  onClick={() => {
+                                    setEditingChapterId(chapter.id);
+                                    setEditingChapterTitle(chapter.title);
+                                    setMenuChapterId(null);
+                                  }}
+                                  className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-[#393F41] hover:bg-[#F8F9FA]"
+                                >
+                                  <Pencil size={12} />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteChapter(chapter.id)}
+                                  className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-red-500 hover:bg-[#F8F9FA]"
+                                >
+                                  <Trash2 size={12} />
+                                  Delete
+                                </button>
+                              </div>
+                            )}
                           </div>
                           <div className="px-3 py-2 space-y-1.5">
                             {chapter.items.map((item) => {

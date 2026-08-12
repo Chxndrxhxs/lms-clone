@@ -12,6 +12,7 @@ def epoch_ms(dt):
 class CourseItemSerializer(serializers.ModelSerializer):
     fileData = serializers.CharField(source="file_url", required=False, allow_blank=True)
     fileMeta = serializers.JSONField(source="file_meta", required=False, allow_null=True)
+    quizQuestions = serializers.JSONField(source="quiz_questions", required=False, allow_null=True)
 
     class Meta:
         model = CourseItem
@@ -26,6 +27,7 @@ class CourseItemSerializer(serializers.ModelSerializer):
             "duration",
             "fileData",
             "fileMeta",
+            "quizQuestions",
         ]
         extra_kwargs = {
             "startDate": {"source": "start_date", "required": False, "allow_null": True},
@@ -133,6 +135,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "fileMeta": "file_meta",
             "startDate": "start_date",
             "endDate": "end_date",
+            "quizQuestions": "quiz_questions",
         }
         return {mapping.get(k, k): v for k, v in item_data.items()}
 

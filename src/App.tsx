@@ -13,16 +13,17 @@ export default function App() {
     <BrowserRouter>
       <CourseProvider>
         <Routes>
-          <Route path="courses/:courseId/preview" element={<CoursePlayerView />} />
-          <Route element={<DashboardLayout />}>
+          <Route path="/" element={<DashboardLayout />}>
             <Route index element={<MainContent />} />
             <Route path="courses" element={<CoursesView />} />
             <Route path="courses/create" element={<CreateCourseView />} />
             <Route path="courses/builder" element={<CourseBuilderView />} />
             <Route path="courses/:courseId/builder" element={<CourseBuilderView />} />
             <Route path="courses/:courseId" element={<CourseInfoView />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
+          <Route path="courses/:courseId/preview" element={<CoursePlayerView />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </CourseProvider>
     </BrowserRouter>

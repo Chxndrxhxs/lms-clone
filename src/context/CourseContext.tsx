@@ -8,6 +8,19 @@ export type FileMeta = {
   type: string;
 };
 
+export type QuizOption = {
+  id: string;
+  text: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: QuizOption[];
+  correctOptionId: string;
+  explanation?: string;
+};
+
 export type CourseItem = {
   id: number;
   title: string;
@@ -19,6 +32,7 @@ export type CourseItem = {
   duration?: string;
   fileMeta?: FileMeta;
   fileData?: string;
+  quizQuestions?: QuizQuestion[];
 };
 
 export type CourseChapter = {
