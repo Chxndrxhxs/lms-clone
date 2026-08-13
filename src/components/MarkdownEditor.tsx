@@ -14,7 +14,7 @@ export function MarkdownEditor({
   required,
 }: MarkdownEditorProps) {
   return (
-    <div className="border border-[#C9CED3] rounded overflow-hidden">
+    <div className="border border-[#C9CED3] overflow-hidden">
       <textarea
         required={required}
         className="w-full resize-none outline-none p-4 text-sm text-[#393F41]"

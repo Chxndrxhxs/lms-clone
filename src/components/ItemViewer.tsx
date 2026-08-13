@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import {
   FileText,
   Video,
@@ -15,6 +15,8 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { CourseItem } from "../context/CourseContext";
+
+const PdfViewer = lazy(() => import("./PdfViewer").then((m) => ({ default: m.PdfViewer })));
 
 function getYouTubeId(url: string): string | null {
   const m = url.match(
@@ -91,7 +93,7 @@ function QuizViewer({ item }: { item: CourseItem }) {
 
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center space-y-4">
-        <div className="rounded-full bg-[#F2F4FF] p-6 text-[#4E5DE0]">
+        <div className="bg-[#F2F4FF] p-6 text-[#4E5DE0]">
           <HelpCircle size={48} />
         </div>
         <h3 className="text-xl font-bold text-[#0F1013]">Quiz Completed!</h3>
@@ -101,7 +103,7 @@ function QuizViewer({ item }: { item: CourseItem }) {
         </p>
         <button
           onClick={handleRetake}
-          className="rounded-lg bg-[#4E5DE0] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
+          className="bg-[#4E5DE0] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
         >
           Retake Quiz
         </button>
@@ -116,14 +118,14 @@ function QuizViewer({ item }: { item: CourseItem }) {
         <span>{Math.round(((currentIndex + 1) / questions.length) * 100)}% Completed</span>
       </div>
 
-      <div className="w-full bg-[#ECEEEF] h-1.5 rounded-full overflow-hidden">
+      <div className="w-full bg-[#ECEEEF] h-1.5 overflow-hidden">
         <div
           className="bg-[#4E5DE0] h-full transition-all duration-300"
           style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
         />
       </div>
 
-      <div className="rounded-2xl border border-[#ECEEEF] bg-white p-6 shadow-sm space-y-6">
+      <div className="border border-[#ECEEEF] bg-white p-6 shadow-sm space-y-6">
         <h4 className="text-base font-semibold text-[#0F1013]">{q.question}</h4>
 
         <div className="space-y-3">
@@ -145,10 +147,10 @@ function QuizViewer({ item }: { item: CourseItem }) {
               <div
                 key={opt.id}
                 onClick={() => handleSelectOption(opt.id)}
-                className={`flex items-center gap-3 rounded-xl border p-4 cursor-pointer transition-all ${optionStyle}`}
+                className={`flex items-center gap-3 border p-4 cursor-pointer transition-all ${optionStyle}`}
               >
                 <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border text-xs font-bold ${
+                  className={`flex h-5 w-5 items-center justify-center border text-xs font-bold ${
                     isSelected ? "border-[#4E5DE0] bg-[#4E5DE0] text-white" : "border-[#C9CED3] text-[#6B7280]"
                   }`}
                 >
@@ -161,7 +163,7 @@ function QuizViewer({ item }: { item: CourseItem }) {
         </div>
 
         {isSubmitted && q.explanation && (
-          <div className={`rounded-xl p-4 text-xs ${isCorrect ? "bg-green-50 text-green-800" : "bg-amber-50 text-amber-800"}`}>
+          <div className={`p-4 text-xs ${isCorrect ? "bg-green-50 text-green-800" : "bg-amber-50 text-amber-800"}`}>
             <span className="font-semibold">Explanation: </span>
             {q.explanation}
           </div>
@@ -171,7 +173,7 @@ function QuizViewer({ item }: { item: CourseItem }) {
           <button
             disabled={currentIndex === 0}
             onClick={() => setCurrentIndex(currentIndex - 1)}
-            className="rounded-lg border border-[#ECEEEF] px-4 py-2 text-sm font-medium text-[#393F41] disabled:opacity-40"
+            className="border border-[#ECEEEF] px-4 py-2 text-sm font-medium text-[#393F41] disabled:opacity-40"
           >
             Previous
           </button>
@@ -180,14 +182,14 @@ function QuizViewer({ item }: { item: CourseItem }) {
             <button
               disabled={!selectedOptId}
               onClick={handleCheckAnswer}
-              className="rounded-lg bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8] disabled:opacity-40"
+              className="bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8] disabled:opacity-40"
             >
               Submit Answer
             </button>
           ) : (
             <button
               onClick={handleNext}
-              className="rounded-lg bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
+              className="bg-[#4E5DE0] px-6 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
             >
               {currentIndex < questions.length - 1 ? "Next Question" : "View Results"}
             </button>
@@ -219,14 +221,14 @@ export function ItemViewer({ item }: { item: CourseItem }) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-2 pb-4 mb-4 border-b border-[#ECEEEF]">
-        <Icon size={18} className="text-[#4E5DE0] flex-shrink-0" />
+        <Icon size={18} className="text-[#4E5DE0] shrink-0" />
         <span className="text-base font-semibold text-[#0F1013] truncate">{item.title}</span>
-        <span className="ml-auto shrink-0 rounded-full bg-[#F2F4FF] px-2 py-0.5 text-xs font-medium text-[#4E5DE0] capitalize">
+        <span className="ml-auto shrink-0 bg-[#F2F4FF] px-2 py-0.5 text-xs font-medium text-[#4E5DE0] capitalize">
           {item.type}
         </span>
       </div>
 
-      <div className="flex-grow min-h-0 overflow-auto">
+      <div className="grow min-h-0 overflow-auto">
         {item.type === "text" && (
           <div className="markdown-body text-sm text-[#393F41]">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.description ?? ""}</ReactMarkdown>
@@ -234,7 +236,7 @@ export function ItemViewer({ item }: { item: CourseItem }) {
         )}
 
         {item.type === "video" && ytId && (
-          <div className="aspect-video w-full overflow-hidden rounded-lg">
+          <div className="aspect-video w-full overflow-hidden ">
             <iframe
               className="h-full w-full"
               src={`https://www.youtube-nocookie.com/embed/${ytId}`}
@@ -246,7 +248,7 @@ export function ItemViewer({ item }: { item: CourseItem }) {
         )}
 
         {item.type === "video" && !ytId && vimeoId && (
-          <div className="aspect-video w-full overflow-hidden rounded-lg">
+          <div className="aspect-video w-full overflow-hidden ">
             <iframe
               className="h-full w-full"
               src={`https://player.vimeo.com/video/${vimeoId}`}
@@ -257,16 +259,30 @@ export function ItemViewer({ item }: { item: CourseItem }) {
         )}
 
         {item.type === "video" && !ytId && !vimeoId && item.fileData && (
-          <video controls src={item.fileData} className="w-full max-h-[60vh] rounded-lg bg-black" />
+          <video controls src={item.fileData} className="w-full max-h-[60vh] bg-black" />
         )}
 
         {item.type === "video" && !ytId && !vimeoId && !item.fileData && <Placeholder item={item} />}
 
-        {(item.type === "pdf" || item.type === "scorm" || item.type === "file") && item.fileData && (
-          <iframe src={item.fileData} title={item.title} className="h-[70vh] w-full rounded-lg border border-[#ECEEEF]" />
+        {item.type === "pdf" && item.fileData && (
+          <Suspense
+            fallback={
+              <div className="flex h-full items-center justify-center text-sm text-neutral-500">
+                Loading PDF...
+              </div>
+            }
+          >
+            <PdfViewer url={item.fileData} title={item.title} />
+          </Suspense>
         )}
 
-        {(item.type === "pdf" || item.type === "scorm" || item.type === "file") && !item.fileData && (
+        {item.type === "pdf" && !item.fileData && <Placeholder item={item} />}
+
+        {(item.type === "scorm" || item.type === "file") && item.fileData && (
+          <iframe src={item.fileData} title={item.title} className="h-[70vh] w-full border border-[#ECEEEF]" />
+        )}
+
+        {(item.type === "scorm" || item.type === "file") && !item.fileData && (
           <Placeholder item={item} />
         )}
 
@@ -277,7 +293,7 @@ export function ItemViewer({ item }: { item: CourseItem }) {
         {item.type === "audio" && !item.fileData && <Placeholder item={item} />}
 
         {item.type === "link" && item.url && (
-          <iframe src={item.url} title={item.title} className="h-[70vh] w-full rounded-lg border border-[#ECEEEF]" />
+          <iframe src={item.url} title={item.title} className="h-[70vh] w-full border border-[#ECEEEF]" />
         )}
 
         {item.type === "link" && !item.url && <Placeholder item={item} />}

@@ -14,7 +14,7 @@ export function MainContent() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {/* Card 1: Sign Ups */}
-          <div className="relative rounded-xl border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
+          <div className="relative border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-gray-500 text-xs mb-1">
                 <span className="font-medium text-gray-700">Sign Ups</span>
@@ -32,7 +32,7 @@ export function MainContent() {
           </div>
 
           {/* Card 2: Paid Users */}
-          <div className="rounded-xl border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
+          <div className="border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-gray-500 text-xs mb-1">
                 <span className="font-medium text-gray-700">Paid Users</span>
@@ -46,7 +46,7 @@ export function MainContent() {
           </div>
 
           {/* Card 3: Total Revenue */}
-          <div className="rounded-xl border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
+          <div className="border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-gray-500 text-xs mb-1">
                 <span className="font-medium text-gray-700">Total Revenue</span>
@@ -60,8 +60,8 @@ export function MainContent() {
           </div>
 
           {/* Card 4: Graphy Assist AI */}
-          <div className="rounded-xl border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-indigo-600 bg-indigo-50 p-1.5 rounded-lg">
+          <div className="border border-gray-200/80 bg-white p-5 shadow-2xs flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-4 right-4 text-indigo-600 bg-indigo-50 p-1.5 ">
               <Sparkles size={16} />
             </div>
             <div>
@@ -75,12 +75,12 @@ export function MainContent() {
       </section>
 
       {/* EARNINGS BANNER 1 */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#fef3c7] via-[#fde68a]/50 to-[#fef3c7] p-8 border border-amber-200/60 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-[#fef3c7] via-[#fde68a]/50 to-[#fef3c7] p-8 border border-amber-200/60 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <h3 className="text-2xl font-serif font-bold text-gray-900">Get your earnings right away</h3>
           <p className="text-sm text-gray-700 mt-1">Enabling your payments are a MUST to collect revenue!</p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors shrink-0">
+        <button className="inline-flex items-center gap-2 bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors shrink-0">
           Instantly connect a payment gateway <ArrowRight size={16} />
         </button>
       </div>
@@ -89,25 +89,25 @@ export function MainContent() {
       <div className="space-y-6 pt-4">
         <h3 className="text-center font-serif italic text-xl text-gray-700">Host your first webinar</h3>
 
-        <div className="rounded-2xl bg-[#e6f4ea] overflow-hidden border border-emerald-100 shadow-xs grid grid-cols-1 lg:grid-cols-12 items-center">
+        <div className="bg-[#e6f4ea] overflow-hidden border border-emerald-100 shadow-xs grid grid-cols-1 lg:grid-cols-12 items-center">
           <div className="lg:col-span-7 p-8 md:p-10 space-y-4">
             <h4 className="text-3xl font-bold text-gray-900 tracking-tight">Capture your best leads with webinars</h4>
             <p className="text-sm text-gray-700 leading-relaxed max-w-xl">
               1 Webinar: an opportunity to host hundreds of audience members! Yes, a trusted in-house lead generator is now at your fingertips.
             </p>
             <div className="pt-2">
-              <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors">
+              <button className="inline-flex items-center gap-2 bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors">
                 Host your first webinar <ArrowRight size={16} />
               </button>
             </div>
           </div>
           <div className="lg:col-span-5 p-6 flex justify-center items-center bg-[#cce8d6]/40 h-full min-h-[220px]">
             {/* Illustration placeholder */}
-            <div className="relative w-full max-w-xs bg-white rounded-xl shadow-md p-4 border border-emerald-200">
+            <div className="relative w-full max-w-xs bg-white shadow-md p-4 border border-emerald-200">
               <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
+                <div className="w-3 h-3 bg-red-400"></div>
+                <div className="w-3 h-3 bg-amber-400"></div>
+                <div className="w-3 h-3 bg-emerald-400"></div>
               </div>
               <div className="py-6 text-center text-emerald-800 font-medium text-sm">
                 Webinar Studio Dashboard
@@ -121,9 +121,9 @@ export function MainContent() {
       <div className="space-y-6 pt-4">
         <h3 className="text-center font-serif italic text-xl text-gray-700">Launch your first course</h3>
 
-        <div className="rounded-2xl bg-[#eef2ff] overflow-hidden border border-indigo-100 shadow-xs grid grid-cols-1 lg:grid-cols-12 items-center">
+        <div className="bg-[#eef2ff] overflow-hidden border border-indigo-100 shadow-xs grid grid-cols-1 lg:grid-cols-12 items-center">
           <div className="lg:col-span-5 p-6 flex justify-center items-center bg-[#e0e7ff]/50 h-full min-h-[220px]">
-            <div className="relative w-full max-w-xs bg-white rounded-xl shadow-md p-6 border border-indigo-200 text-center">
+            <div className="relative w-full max-w-xs bg-white shadow-md p-6 border border-indigo-200 text-center">
               <span className="text-4xl">🌐</span>
               <p className="text-xs font-semibold text-indigo-900 mt-2">Course Studio & Curriculum</p>
             </div>
@@ -134,7 +134,7 @@ export function MainContent() {
               No launch is complete without a good shout out. Share on channels like Instagram, Twitter, and Telegram right away.
             </p>
             <div className="pt-2">
-              <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors">
+              <button className="inline-flex items-center gap-2 bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors">
                 Share your new course on social media <ArrowRight size={16} />
               </button>
             </div>
@@ -143,7 +143,7 @@ export function MainContent() {
 
         {/* TWO PROMO CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <div className="rounded-2xl bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between">
+          <div className="bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between">
             <div>
               <h5 className="text-xl font-bold text-gray-900">Create offers that are impossible to refuse</h5>
             </div>
@@ -154,7 +154,7 @@ export function MainContent() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between">
+          <div className="bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between">
             <div>
               <h5 className="text-xl font-bold text-gray-900">Your community is going to be so excited about this!</h5>
             </div>
@@ -172,17 +172,17 @@ export function MainContent() {
         <h3 className="text-center font-serif italic text-xl text-gray-700">Finish your final lap...</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-2xl bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between space-y-6">
+          <div className="bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between space-y-6">
             <div>
               <h4 className="text-2xl font-serif font-bold text-gray-900">Get your earnings right away</h4>
               <p className="text-sm text-gray-600 mt-2">Enabling your payments are a MUST to collect revenue!</p>
             </div>
-            <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors w-fit">
+            <button className="inline-flex items-center gap-2 bg-indigo-950 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-900 transition-colors w-fit">
               Instantly connect a payment gateway <ArrowRight size={16} />
             </button>
           </div>
 
-          <div className="rounded-2xl bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between space-y-6">
+          <div className="bg-white p-8 border border-gray-200/80 shadow-xs flex flex-col justify-between space-y-6">
             <div>
               <h4 className="text-2xl font-serif font-bold text-gray-900">Invite your community to a place you own</h4>
               <p className="text-sm text-gray-600 mt-2">There's no limit to the number of members you can invite!</p>

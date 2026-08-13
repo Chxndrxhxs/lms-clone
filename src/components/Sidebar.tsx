@@ -47,45 +47,42 @@ function UserMenu({ collapsed }: { collapsed: boolean }) {
           setOpen(!open);
         }}
         title={collapsed ? "chandrahas" : undefined}
-        className={`flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left hover:bg-[#F7F9FA] ${
+        className={`flex w-full items-center gap-3 px-2 py-2.5 text-left hover:bg-neutral-50 ${
           collapsed ? "justify-center px-0" : ""
         }`}
       >
-        <img src={USER_AVATAR} alt="User avatar" className="h-7 w-7 shrink-0 rounded-full" />
+        <img src={USER_AVATAR} alt="User avatar" className="h-7 w-7 shrink-0" />
         {!collapsed && (
           <>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium capitalize text-[#2D4750]">chandrahas</p>
-              <p className="truncate text-xs capitalize text-[#878C90] opacity-60">Super Admin</p>
+              <p className="truncate text-sm font-semibold capitalize text-neutral-900">chandrahas</p>
+              <p className="truncate text-xs text-neutral-500">Super Admin</p>
             </div>
-            <EllipsisVertical size={16} className="shrink-0 text-[#878C90]" />
+            <EllipsisVertical size={16} className="shrink-0 text-neutral-400" />
           </>
         )}
       </button>
 
       {open && !collapsed && (
-        <div className="absolute bottom-16 left-3 z-50 w-64 rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-lg">
-          <div className="mb-6">
+        <div className="absolute bottom-20 left-3 z-50 w-64 border border-neutral-200 bg-white p-2 shadow-xl">
+          <div className="mb-2">
             <a
               href="/t/upgrade"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center justify-between gap-3"
+              className="flex items-center justify-between gap-3 p-2 text-sm font-medium text-neutral-900"
             >
-              <span className="block w-full rounded-lg bg-[#EEF0F4] py-2.5 text-center text-sm font-normal text-[#0F1013]">
-                Upgrade now
-              </span>
-              <ChevronRight size={16} className="shrink-0 text-[#878C90]" />
+              <span>Upgrade now</span>
             </a>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col border-t border-neutral-100 pt-2">
             {userMenuItems.map(({ label, icon: Icon, href }) => (
               <a
                 key={label}
                 href={href}
                 onClick={(e) => e.stopPropagation()}
-                className="flex h-9 items-center gap-3 rounded-[6px] py-2 pl-2 text-sm font-normal text-[#393F41] hover:bg-[#F7F9FA]"
+                className="flex h-9 items-center gap-3 py-2 px-2 text-sm text-neutral-600 hover:bg-neutral-50"
               >
-                <Icon size={16} className="text-[#878C90]" />
+                <Icon size={16} className="text-neutral-400" />
                 <span>{label}</span>
               </a>
             ))}
@@ -110,15 +107,15 @@ function NavItem({ icon: Icon, label, collapsed, active, onClick, right }: NavIt
     <button
       onClick={onClick}
       title={collapsed ? label : undefined}
-      className={`text-left max-h-[2.5rem] h-9 w-full flex gap-[8px] rounded-[6px] items-center transition-all relative px-2 ${
+      className={`text-left max-h-[2.5rem] h-9 w-full flex gap-[8px] items-center transition-all relative px-2 ${
         collapsed ? "justify-center px-0" : "justify-start"
-      } ${active ? "bg-indigo-50/70 text-indigo-950 font-semibold" : "hover:bg-[#F7F9FA]"}`}
+      } ${active ? "bg-neutral-100 text-neutral-950 font-medium" : "hover:bg-neutral-50"}`}
     >
-      <span className={collapsed ? "flex justify-center" : "cursor-pointer text-[#878C90] pr-3 pl-[3px]"}>
-        <Icon size={18} />
+      <span className={collapsed ? "flex justify-center" : "cursor-pointer text-neutral-400 pr-3 pl-[3px]"}>
+        <Icon size={16} />
       </span>
-      <div className={collapsed ? "hidden" : "w-full flex items-center justify-between text-[#2D4750]"}>
-        <h4 className="text-sm font-normal text-[#393F41]">{label}</h4>
+      <div className={collapsed ? "hidden" : "w-full flex items-center justify-between"}>
+        <h4 className="text-sm font-medium text-neutral-700">{label}</h4>
         {right}
       </div>
     </button>
@@ -134,17 +131,17 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`sticky top-0 relative flex h-screen shrink-0 flex-col border-r border-gray-200 bg-white pt-5 overflow-hidden transition-[width] ${
+      className={`sticky top-0 relative flex h-screen shrink-0 flex-col border-r border-neutral-200 bg-white pt-5 overflow-hidden transition-[width] ${
         collapsed ? "w-16 px-2" : "w-64 px-3"
       }`}
     >
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3.5 top-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white text-[#4E5DE0] shadow-md hover:bg-[#4E5DE0] hover:text-white hover:shadow-lg transition-colors"
+        className="absolute -right-3.5 top-5 z-10 flex h-7 w-7 items-center justify-center border border-neutral-200 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50 transition-colors"
         title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        {collapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
+        {collapsed ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}
       </button>
 
       {/* Logo */}
@@ -153,7 +150,7 @@ export function Sidebar() {
           <img
             src="https://d502jbuhuh9wk.cloudfront.net/t/static/images/defaultOrg_83bee28077f95b04bfc6.png"
             alt="Sidebar logo"
-            className="w-10 h-10 object-contain rounded-lg"
+            className="w-8 h-8 object-contain"
           />
         </span>
       </div>
@@ -188,56 +185,56 @@ export function Sidebar() {
           <div className="flex flex-col gap-[8px] pl-2">
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-neutral-50"
             >
-              <span className="text-sm font-normal text-[#393F41] ml-6">AI Avatar</span>
+              <span className="text-sm text-neutral-600 ml-6">AI Avatar</span>
             </button>
             <button
               onClick={() => navigate("/courses")}
-              className={`text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 ${
-                isCourses ? "bg-[#F2F4FF] text-[#5160E5] font-medium" : "hover:bg-[#F7F9FA]"
+              className={`text-left w-full h-9 flex items-center gap-3 py-2 pl-2 ${
+                isCourses ? "bg-neutral-100 text-neutral-950 font-medium" : "hover:bg-neutral-50"
               }`}
             >
-              <span className={`text-sm ml-6 ${isCourses ? "text-[#5160E5] font-semibold" : "text-[#393F41]"}`}>
+              <span className={`text-sm ml-6 ${isCourses ? "font-semibold" : "text-neutral-600"}`}>
                 Courses
               </span>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <span className="text-sm font-normal text-[#393F41] ml-6">Packages</span>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <div className="flex items-center justify-between w-full pr-2">
                 <span className="text-sm font-normal text-[#393F41] ml-6">Coaching</span>
-                <span className="rounded-[100px] px-2 py-0.5 text-[10px] font-medium uppercase text-[#393F41] bg-[#FFE675]">Beta</span>
+                <span className="px-2 py-0.5 text-[10px] font-medium uppercase text-[#393F41] bg-[#FFE675]">Beta</span>
               </div>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <span className="text-sm font-normal text-[#393F41] ml-6">Memberships</span>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <span className="text-sm font-normal text-[#393F41] ml-6">Webinars</span>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <span className="text-sm font-normal text-[#393F41] ml-6">Digital products</span>
             </button>
             <button
               onClick={() => navigate("/")}
-              className="text-left w-full h-9 rounded-[6px] flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
+              className="text-left w-full h-9 flex items-center gap-3 py-2 pl-2 hover:bg-[#F7F9FA]"
             >
               <span className="text-sm font-normal text-[#393F41] ml-6">Telegram communities</span>
             </button>

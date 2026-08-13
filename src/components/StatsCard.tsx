@@ -18,17 +18,17 @@ export function StatsCard({
   iconColor,
 }: StatsCardProps) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="border border-neutral-200 bg-white p-6">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-gray-500">{label}</p>
-          <p className="mt-2 text-3xl font-semibold text-gray-900">{value}</p>
+          <p className="text-xs font-semibold tracking-wider text-neutral-500 uppercase">{label}</p>
+          <p className="mt-2 text-3xl font-bold text-neutral-900">{value}</p>
         </div>
-        <div className={`rounded-lg p-2.5 ${bg}`}>
+        <div className={`p-2 ${bg}`}>
           <Icon size={20} className={iconColor} />
         </div>
       </div>
-      <p className="mt-3 text-sm text-gray-500">{change}</p>
+      <p className="mt-3 text-sm text-neutral-600">{change}</p>
     </div>
   );
 }

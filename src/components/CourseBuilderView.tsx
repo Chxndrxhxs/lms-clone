@@ -31,6 +31,7 @@ import type { ItemSubmitData } from "./ItemModal";
 import { useCourses, type CourseChapter } from "../context/CourseContext";
 import { courseApi } from "../api/courses";
 import { ItemViewer } from "./ItemViewer";
+import { Toast } from "./Toast";
 
 const itemTypeIcons: Record<string, LucideIcon> = {
   pdf: FileText,
@@ -63,6 +64,7 @@ export function CourseBuilderView() {
   const [editingItem, setEditingItem] = useState<{ chapterId: number; itemId: number } | null>(null);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [activeItemType, setActiveItemType] = useState<ItemType | null>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -125,9 +127,8 @@ export function CourseBuilderView() {
   };
 
   const handleSave = async () => {
-    const editId = editingCourseId;
     await saveCourse();
-    navigate(editId != null ? `/courses/${editId}` : "/courses");
+    setShowToast(true);
   };
 
   const handleSetUserPreview = async () => {
@@ -216,12 +217,13 @@ export function CourseBuilderView() {
 
   return (
     <div id="courseCont" className="min-h-screen bg-white flex flex-col editMode">
+      {showToast && <Toast message="Course saved successfully!" onClose={() => setShowToast(false)} />}
       <div className="docs-container flex flex-col flex-grow">
         {/* Header */}
         <div className="flex items-center gap-4 px-6 py-4 border-b border-[#ECEEEF]">
           <button
             onClick={handleBack}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-[#4E5DE0] hover:bg-[#F7F9FA]"
+            className="flex h-9 w-9 items-center justify-center text-[#4E5DE0] hover:bg-[#F7F9FA]"
             aria-label="Back"
           >
             <ArrowLeft size={18} />
@@ -234,21 +236,21 @@ export function CourseBuilderView() {
           />
           <div className="ml-auto flex items-center gap-3">
             <button
-              className="flex items-center gap-2 rounded-lg border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
+              className="flex items-center gap-2 border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
               title="Preview course as learner"
             >
               <Eye size={16} />
             </button>
             <button
               onClick={() => setIsPublishModalOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
+              className="flex items-center gap-2 border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
             >
               <Upload size={16} />
               Publish course
             </button>
             <button
               onClick={handleSave}
-              className="saveCourseBtn flex items-center gap-2 rounded-lg bg-[#4E5DE0] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
+              className="saveCourseBtn flex items-center gap-2 bg-[#4E5DE0] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
             >
               <Cloud size={16} />
               Save course
@@ -265,7 +267,7 @@ export function CourseBuilderView() {
               <div className="mb-6">
                 <div
                   onClick={() => coverInputRef.current?.click()}
-                  className="relative rounded-lg border-2 border-dashed border-[#D1D5DA] bg-[#F8F9FA] aspect-video flex flex-col items-center justify-center cursor-pointer text-[#393F41] hover:border-[#4E5DE0] overflow-hidden"
+                  className="relative border-2 border-dashed border-[#D1D5DA] bg-[#F8F9FA] aspect-video flex flex-col items-center justify-center cursor-pointer text-[#393F41] hover:border-[#4E5DE0] overflow-hidden"
                   title="Upload course cover"
                 >
                   {draft.cover ? (
@@ -287,11 +289,11 @@ export function CourseBuilderView() {
                 <div className="flex items-center justify-between mt-4">
                   <button
                     onClick={handleSetUserPreview}
-                    className="rounded-lg border border-[#ECEEEF] bg-white px-3 py-1.5 text-xs font-medium text-[#393F41] hover:bg-[#F7F9FA]"
+                    className="border border-[#ECEEEF] bg-white px-3 py-1.5 text-xs font-medium text-[#393F41] hover:bg-[#F7F9FA]"
                   >
                     Set user preview
                   </button>
-                  <button className="rounded-lg border border-[#ECEEEF] bg-white px-3 py-1.5 text-xs font-medium text-[#393F41] hover:bg-[#F7F9FA]">
+                  <button className="border border-[#ECEEEF] bg-white px-3 py-1.5 text-xs font-medium text-[#393F41] hover:bg-[#F7F9FA]">
                     Set rules
                   </button>
                 </div>
@@ -306,7 +308,7 @@ export function CourseBuilderView() {
                       return (
                         <div
                           key={chapter.id}
-                          className={`rounded-lg border transition-colors ${
+                          className={`border transition-colors ${
                             isSelected ? "border-[#4E5DE0]" : "border-[#ECEEEF]"
                           }`}
                         >
@@ -327,7 +329,7 @@ export function CourseBuilderView() {
                                 <input
                                   type="text"
                                   autoFocus
-                                  className="text-sm font-medium text-[#393F41] bg-white border border-[#4E5DE0] rounded px-2 py-0.5 outline-none w-full"
+                                  className="text-sm font-medium text-[#393F41] bg-white border border-[#4E5DE0] px-2 py-0.5 outline-none w-full"
                                   value={editingChapterTitle}
                                   onChange={(e) => setEditingChapterTitle(e.target.value)}
                                   onBlur={() => {
@@ -373,7 +375,7 @@ export function CourseBuilderView() {
                             </button>
                             {menuChapterId === chapter.id && (
                               <div
-                                className="absolute right-3 top-full z-20 mt-1 w-32 rounded-lg border border-[#ECEEEF] bg-white py-1 shadow-lg"
+                                className="absolute right-3 top-full z-20 mt-1 w-32 border border-[#ECEEEF] bg-white py-1 shadow-lg"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <button
@@ -404,7 +406,7 @@ export function CourseBuilderView() {
                               return (
                                 <div
                                   key={item.id}
-                                  className={`relative flex items-center gap-2 pl-5 text-xs rounded-md px-2 py-1.5 -ml-2 cursor-pointer ${
+                                  className={`relative flex items-center gap-2 pl-5 text-xs px-2 py-1.5 -ml-2 cursor-pointer ${
                                     isItemSelected
                                       ? "bg-[#F2F4FF] text-[#4E5DE0]"
                                       : "text-[#6B7280] hover:bg-[#F8F9FA]"
@@ -432,7 +434,7 @@ export function CourseBuilderView() {
                                   </button>
                                   {menuItemId === item.id && (
                                     <div
-                                      className="absolute right-0 top-full z-20 mt-1 w-32 rounded-lg border border-[#ECEEEF] bg-white py-1 shadow-lg"
+                                      className="absolute right-0 top-full z-20 mt-1 w-32 border border-[#ECEEEF] bg-white py-1 shadow-lg"
                                       onClick={(e) => e.stopPropagation()}
                                     >
                                       <button
@@ -482,9 +484,9 @@ export function CourseBuilderView() {
             {chapters.length === 0 ? (
               <div className="d-flex flex-col gap-6 mt-10 mr-8" style={{ maxWidth: 720 }}>
                 {/* AI outline banner */}
-                <div className="flex items-center gap-12 rounded-lg p-4" style={{ background: "#EEEFFF" }}>
+                <div className="flex items-center gap-12 p-4" style={{ background: "#EEEFFF" }}>
                   <div className="flex flex-col gap-2 flex-grow">
-                    <span className="text-xs font-bold w-[60px] rounded px-2 py-0.5" style={{ color: "#152561", background: "#FFFFFF" }}>
+                    <span className="text-xs font-bold w-[60px] px-2 py-0.5" style={{ color: "#152561", background: "#FFFFFF" }}>
                       <Star size={12} className="inline mr-1" fill="currentColor" /> NEW
                     </span>
                     <div className="font-semibold text-base leading-5" style={{ color: "#232228" }}>
@@ -496,7 +498,7 @@ export function CourseBuilderView() {
                     </div>
                   </div>
                   <button
-                    className="generateOutlineAIBtn inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shrink-0"
+                    className="generateOutlineAIBtn inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white shrink-0"
                     style={{ width: 250, background: "linear-gradient(45deg, #4490FF, #0620A7)" }}
                   >
                     <Sparkles size={16} />
@@ -507,7 +509,7 @@ export function CourseBuilderView() {
                 <div className="text-center text-2xl font-semibold">OR</div>
 
                 {/* Manual add */}
-                <div className="flex items-center gap-12 rounded-lg p-4" style={{ background: "#F8F9FA" }}>
+                <div className="flex items-center gap-12 p-4" style={{ background: "#F8F9FA" }}>
                   <div className="flex flex-col gap-2 flex-grow">
                     <div className="font-semibold text-base leading-5" style={{ color: "#232228" }}>
                       Add first chapter manually
@@ -519,7 +521,7 @@ export function CourseBuilderView() {
                   </div>
                   <button
                     onClick={() => setIsAddItemModalOpen(true)}
-                    className="newItemBtn inline-flex items-center justify-center rounded-lg border border-[#ECEEEF] bg-white px-4 py-2.5 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA] shrink-0"
+                    className="newItemBtn inline-flex items-center justify-center border border-[#ECEEEF] bg-white px-4 py-2.5 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA] shrink-0"
                     style={{ width: 250 }}
                   >
                     Add manually
@@ -547,7 +549,7 @@ export function CourseBuilderView() {
                   <div className="empty-action mt-5">
                     <button
                       onClick={() => setIsAddItemModalOpen(true)}
-                      className="btn btn-primary newLabelSubItemBtn rounded-lg bg-[#4E5DE0] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
+                      className="btn btn-primary newLabelSubItemBtn bg-[#4E5DE0] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
                     >
                       Create
                     </button>
@@ -564,7 +566,7 @@ export function CourseBuilderView() {
                 </p>
                 <button
                   onClick={handleAddChapter}
-                  className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#4E5DE0] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
+                  className="mt-2 inline-flex items-center gap-2 bg-[#4E5DE0] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4350C8]"
                 >
                   <Plus size={16} /> Add another chapter
                 </button>
@@ -577,7 +579,7 @@ export function CourseBuilderView() {
       {/* Publish modal */}
       {isPublishModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white shadow-xl overflow-hidden">
+          <div className="w-full max-w-md bg-white shadow-xl overflow-hidden">
             <div className="flex items-center justify-between border-b border-[#ECEEEF] px-6 py-4">
               <div className="text-base font-semibold text-[#0F1013]">Publish course</div>
               <button onClick={() => setIsPublishModalOpen(false)} className="text-[#9AA1A8] hover:text-[#393F41]">
@@ -590,7 +592,7 @@ export function CourseBuilderView() {
             <div className="flex justify-end gap-3 px-6 pb-6">
               <button
                 onClick={() => setIsPublishModalOpen(false)}
-                className="rounded-lg border border-[#C9CED3] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
+                className="border border-[#C9CED3] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]"
               >
                 Cancel
               </button>
@@ -599,7 +601,7 @@ export function CourseBuilderView() {
                   setIsPublishModalOpen(false);
                   handleSave();
                 }}
-                className="rounded-lg bg-[#4E5DE0] px-5 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
+                className="bg-[#4E5DE0] px-5 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
               >
                 Publish
               </button>
@@ -615,7 +617,7 @@ export function CourseBuilderView() {
           onClick={() => setIsAddItemModalOpen(false)}
         >
           <div
-            className="w-full max-w-[1050px] max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-xl"
+            className="w-full max-w-[1050px] max-h-[90vh] overflow-y-auto bg-white shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-[#ECEEEF] px-6 py-4">
@@ -755,7 +757,7 @@ export function CourseBuilderView() {
                   <div className="text-sm text-[#6B7280] mt-2">
                     Import from your existing course content
                   </div>
-                  <button className="mt-3 rounded-lg border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]">
+                  <button className="mt-3 border border-[#ECEEEF] bg-white px-4 py-2 text-sm font-medium text-[#393F41] hover:bg-[#F7F9FA]">
                     Import from Asset Library
                   </button>
                 </div>

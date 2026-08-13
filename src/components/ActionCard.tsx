@@ -15,11 +15,11 @@ export function ActionCard({
 }: ActionCardProps) {
   return (
     <div
-      className={`flex flex-col rounded-lg p-6 text-white shadow-sm ${bg}`}
+      className={`flex flex-col p-6 text-white shadow-none ${bg}`}
     >
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-1.5 flex-1 text-sm text-white/80">{description}</p>
-      <button className="mt-5 inline-flex w-fit items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-opacity hover:opacity-90">
+      <h3 className="text-sm font-bold tracking-tight text-white uppercase">{title}</h3>
+      <p className="mt-1.5 flex-1 text-sm text-white/90">{description}</p>
+      <button className="mt-5 inline-flex w-fit items-center gap-2 bg-white px-4 py-2 text-sm font-medium text-neutral-900 transition-opacity hover:opacity-90">
         {buttonLabel}
         <ArrowRight size={16} />
       </button>

@@ -125,7 +125,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div className="w-full max-w-lg bg-white shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between border-b border-[#ECEEEF] px-6 py-4">
           <div className="text-base font-semibold text-[#0F1013]">{headerTitle}</div>
           <button onClick={onClose} className="text-[#9AA1A8] hover:text-[#393F41]" aria-label="Close">
@@ -141,7 +141,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
               <input
                 type="text"
                 required
-                className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                 placeholder={needsUpload ? `${meta[type].title} title` : "Enter title"}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -153,7 +153,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                 <label className="block text-sm font-medium text-[#0F1013] mb-1.5">
                   {type === "video" ? "Upload video or YouTube/Vimeo URL" : `Upload ${type.toUpperCase()} file`} *
                 </label>
-                <label className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#C9CED3] bg-[#F8F9FA] px-4 py-8 cursor-pointer hover:border-[#4E5DE0]">
+                <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#C9CED3] bg-[#F8F9FA] px-4 py-8 cursor-pointer hover:border-[#4E5DE0]">
                   <Upload size={24} className="text-[#9AA1A8]" />
                   <span className="text-sm text-[#393F41] font-medium">
                     {file
@@ -179,7 +179,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                 <label className="block text-sm font-medium text-[#0F1013] mb-1.5">YouTube / Vimeo URL</label>
                 <input
                   type="url"
-                  className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                  className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                   placeholder="https://www.youtube.com/watch?v=..."
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
@@ -193,7 +193,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                 <input
                   type="url"
                   required
-                  className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                  className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                   placeholder="https://example.com"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
@@ -226,14 +226,14 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                         },
                       ]);
                     }}
-                    className="rounded-lg bg-[#F2F4FF] px-3 py-1.5 text-xs font-semibold text-[#4E5DE0] hover:bg-[#E8ECFF]"
+                    className="bg-[#F2F4FF] px-3 py-1.5 text-xs font-semibold text-[#4E5DE0] hover:bg-[#E8ECFF]"
                   >
                     + Add Question
                   </button>
                 </div>
 
                 {quizQuestions.map((q, qIndex) => (
-                  <div key={q.id} className="rounded-xl border border-[#ECEEEF] bg-[#F8F9FA] p-4 space-y-3">
+                  <div key={q.id} className="border border-[#ECEEEF] bg-[#F8F9FA] p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-[#393F41]">Question {qIndex + 1}</span>
                       {quizQuestions.length > 1 && (
@@ -251,7 +251,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                       <input
                         type="text"
                         required
-                        className="w-full rounded-lg border border-[#C9CED3] bg-white px-3 py-2 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                        className="w-full border border-[#C9CED3] bg-white px-3 py-2 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                         placeholder="Enter question text..."
                         value={q.question}
                         onChange={(e) => {
@@ -284,7 +284,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                           <input
                             type="text"
                             required
-                            className="flex-grow rounded-lg border border-[#C9CED3] bg-white px-3 py-1.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                            className="flex-grow border border-[#C9CED3] bg-white px-3 py-1.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                             placeholder={`Option ${optIndex + 1}`}
                             value={opt.text}
                             onChange={(e) => {
@@ -346,7 +346,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                     <div>
                       <input
                         type="text"
-                        className="w-full rounded-lg border border-[#C9CED3] bg-white px-3 py-1.5 text-xs text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                        className="w-full border border-[#C9CED3] bg-white px-3 py-1.5 text-xs text-[#393F41] outline-none focus:border-[#4E5DE0]"
                         placeholder="Explanation (optional, shown after answering)..."
                         value={q.explanation ?? ""}
                         onChange={(e) => {
@@ -377,15 +377,13 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                   <textarea
                     required
                     rows={4}
-                    className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0] resize-none"
+                    className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0] resize-none"
                     placeholder={
                       type === "assignment"
                         ? "Write assignment instructions for learners..."
                         : type === "coding"
                           ? "Describe the coding problem learners will solve..."
-                          : type === "quiz"
-                            ? "Describe the quiz..."
-                            : "Describe the form / what information you want to collect..."
+                          : "Describe the form / what information you want to collect..."
                     }
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -402,7 +400,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                     <input
                       type="datetime-local"
                       required
-                      className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                      className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                     />
@@ -412,7 +410,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                     <input
                       type="datetime-local"
                       required
-                      className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                      className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
@@ -432,7 +430,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                     <input
                       type="datetime-local"
                       required
-                      className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                      className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                     />
@@ -442,7 +440,7 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
                     <input
                       type="number"
                       min={1}
-                      className="w-full rounded-lg border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
+                      className="w-full border border-[#C9CED3] px-3 py-2.5 text-sm text-[#393F41] outline-none focus:border-[#4E5DE0]"
                       placeholder="60"
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
@@ -458,13 +456,13 @@ export function ItemModal({ type, onClose, onSubmit, initialData }: ItemModalPro
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg text-sm font-medium text-[#4E5DE0] px-3 py-2 hover:bg-[#F7F9FA]"
+              className="text-sm font-medium text-[#4E5DE0] px-3 py-2 hover:bg-[#F7F9FA]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-[#4E5DE0] px-5 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
+              className="bg-[#4E5DE0] px-5 py-2 text-sm font-semibold text-white hover:bg-[#4350C8]"
             >
               {initialData ? "Save changes" : "Submit"}
             </button>

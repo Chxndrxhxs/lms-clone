@@ -19,6 +19,24 @@ class Course(models.Model):
     price = models.CharField(max_length=50, blank=True, default="")
     pass_fees = models.BooleanField(default=True)
 
+    category = models.CharField(max_length=500, blank=True, default="")
+    featured_priority = models.PositiveIntegerField(default=0)
+    tax_rate = models.CharField(max_length=10, blank=True, default="18")
+    course_url = models.CharField(max_length=500, blank=True, default="")
+    canonical_url = models.CharField(max_length=500, blank=True, default="")
+    seo_title = models.CharField(max_length=500, blank=True, default="")
+    seo_description = models.TextField(blank=True, default="")
+
+    show_validity = models.BooleanField(default=True)
+    access_channels = models.JSONField(default=list, blank=True)
+    offline_usage = models.BooleanField(default=True)
+    show_curriculum_info = models.BooleanField(default=True)
+    allow_bookmarks = models.BooleanField(default=True)
+
+    welcome_email_enabled = models.BooleanField(default=False)
+    welcome_email_subject = models.CharField(max_length=500, blank=True, default="")
+    welcome_email_content = models.TextField(blank=True, default="")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -55,11 +55,27 @@ export type Course = {
   pricing: CoursePricing;
   chapters: CourseChapter[];
   createdAt: number;
+  updatedAt?: number;
   cover?: string;
   tags?: string;
   instructor?: string;
   tagline?: string;
   language?: string;
+  category?: string;
+  featuredPriority?: number;
+  taxRate?: string;
+  courseUrl?: string;
+  canonicalUrl?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  showValidity?: boolean;
+  accessChannels?: string[];
+  offlineUsage?: boolean;
+  showCurriculumInfo?: boolean;
+  allowBookmarks?: boolean;
+  welcomeEmailEnabled?: boolean;
+  welcomeEmailSubject?: string;
+  welcomeEmailContent?: string;
 };
 
 type CourseDraft = {

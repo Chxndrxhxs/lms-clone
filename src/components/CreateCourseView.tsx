@@ -6,10 +6,12 @@ import {
   Wand2,
   RefreshCw,
   X,
+  Check,
 } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useCourses } from "../context/CourseContext";
+import { Toast } from "./Toast";
 import { MarkdownEditor } from "./MarkdownEditor";
+import { useCourses } from "../context/CourseContext";
 
 export function CreateCourseView() {
   const { draft, updateDraft } = useCourses();
@@ -22,6 +24,12 @@ export function CreateCourseView() {
   const [passFees, setPassFees] = useState(draft.pricing.passFees ?? true);
   const [isAiPreviewOpen, setIsAiPreviewOpen] = useState(false);
   const [showQuitModal, setShowQuitModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  
+  const handleGenerateAI = () => {
+    // Add logic for AI generation here
+    alert("AI generation triggered. Connect your API keys in CourseContext or API client.");
+  };
 
   const handleQuit = () => {
     navigate("/courses");
@@ -34,7 +42,14 @@ export function CreateCourseView() {
       description,
       pricing: { planType: planType as "FREE" | "ONE_TIME", mrp, price, passFees },
     });
-    navigate("/courses/builder");
+    
+    // Simulate DB save
+    setShowToast(true);
+    
+    // Increased delay to ensure user sees the toast before navigation
+    setTimeout(() => {
+        navigate("/courses/builder");
+    }, 2000);
   };
 
   return (
@@ -46,7 +61,7 @@ export function CreateCourseView() {
             Title *
           </label>
           <input
-            className="border outline-none border-[#C9CED3] focus:border-[#4E5DE0] pl-4 pr-4 py-3.5 w-full text-sm rounded bg-white transition-colors duration-200 text-[#393F41]"
+            className="border outline-none border-[#C9CED3] focus:border-[#4E5DE0] pl-4 pr-4 py-3.5 w-full text-sm bg-white transition-colors duration-200 text-[#393F41]"
             name="title"
             placeholder="Enter course title"
             id="title"
@@ -60,7 +75,7 @@ export function CreateCourseView() {
         <div className="bg-[#F4F6FA] p-4">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-1.5 self-start rounded bg-white py-0.5 px-2">
+              <div className="flex items-center gap-1.5 self-start bg-white py-0.5 px-2">
                 <Star size={12} className="text-[#152561]" fill="currentColor" />
                 <span className="text-xs font-bold text-[#152561]">NEW</span>
               </div>
@@ -70,19 +85,11 @@ export function CreateCourseView() {
             </div>
             <button
               type="button"
-              onClick={() => setIsAiPreviewOpen(true)}
-              className="relative inline-flex items-center gap-2 rounded-full bg-white border border-[#ECEEEF] font-semibold whitespace-nowrap shadow-sm transition-shadow hover:shadow-md px-4 h-10 text-sm"
+              onClick={handleGenerateAI}
+              className="relative inline-flex items-center gap-2 bg-white border border-neutral-200 font-semibold whitespace-nowrap shadow-sm transition-all hover:shadow hover:border-neutral-300 px-4 h-10 text-sm"
             >
-              <Wand2 size={17} />
-              <span
-                className="bg-clip-text text-transparent font-semibold"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(92deg, #37BEC9 0%, #F5B265 32%, #F27CA6 64%, #8E7BF5 100%)",
-                }}
-              >
-                Generate using AI
-              </span>
+              <Wand2 size={17} className="text-neutral-500" />
+              <span className="text-neutral-900 font-medium">Generate using AI</span>
             </button>
           </div>
         </div>
@@ -105,7 +112,7 @@ export function CreateCourseView() {
           <label className="text-base font-semibold text-[#0F1013] block">Set pricing</label>
 
           {/* Free plan */}
-          <div className="bg-[#F4F6FA] p-5 flex gap-5 rounded-lg">
+          <div className="bg-[#F4F6FA] p-5 flex gap-5 ">
             <div className="w-8 h-8 flex justify-center items-center flex-shrink-0">
               <label className="cursor-pointer items-center flex m-0">
                 <input
@@ -116,8 +123,8 @@ export function CreateCourseView() {
                   onChange={() => setPlanType("FREE")}
                   className="hidden"
                 />
-                <div className="h-3 w-3 border rounded-full flex items-center justify-center m-0 border-[#393F41]">
-                  {planType === "FREE" && <div className="bg-[#393F41] h-[6px] w-[6px] rounded-full" />}
+                <div className="h-3 w-3 border flex items-center justify-center m-0 border-[#393F41]">
+                  {planType === "FREE" && <div className="bg-[#393F41] h-[6px] w-[6px] " />}
                 </div>
               </label>
             </div>
@@ -130,7 +137,7 @@ export function CreateCourseView() {
           </div>
 
           {/* One-time plan */}
-          <div className="bg-[#F4F6FA] p-5 flex gap-5 rounded-lg">
+          <div className="bg-[#F4F6FA] p-5 flex gap-5 ">
             <div className="w-8 h-8 flex justify-center items-center flex-shrink-0">
               <label className="cursor-pointer items-center flex m-0">
                 <input
@@ -141,8 +148,8 @@ export function CreateCourseView() {
                   onChange={() => setPlanType("ONE_TIME")}
                   className="hidden"
                 />
-                <div className="h-3 w-3 border rounded-full flex items-center justify-center m-0 border-[#4E5DE0]">
-                  {planType === "ONE_TIME" && <div className="bg-[#4E5DE0] h-[6px] w-[6px] rounded-full" />}
+                <div className="h-3 w-3 border flex items-center justify-center m-0 border-[#4E5DE0]">
+                  {planType === "ONE_TIME" && <div className="bg-[#4E5DE0] h-[6px] w-[6px] " />}
                 </div>
               </label>
             </div>
@@ -159,12 +166,12 @@ export function CreateCourseView() {
                       <label className="text-sm font-medium text-[#0F1013] mb-2 block" htmlFor="mrp">
                         Total price *
                       </label>
-                      <div className="flex items-center justify-center rounded border border-[#C9CED3] focus-within:border-[#4E5DE0] bg-white overflow-hidden">
+                      <div className="flex items-center justify-center border border-[#C9CED3] focus-within:border-[#4E5DE0] bg-white overflow-hidden">
                         <div className="flex items-center justify-center self-stretch border-r border-[#C9CED3] bg-[#F4F6FA]">
                           <div className="px-3 text-sm">₹</div>
                         </div>
                         <input
-                          className="border outline-none border-transparent pl-4 pr-4 py-3.5 w-full text-sm rounded bg-white"
+                          className="border outline-none border-transparent pl-4 pr-4 py-3.5 w-full text-sm bg-white"
                           name="mrp"
                           type="number"
                           placeholder="Enter price"
@@ -177,12 +184,12 @@ export function CreateCourseView() {
                       <label className="text-sm font-medium text-[#0F1013] mb-2 block" htmlFor="price">
                         Discount Amount {mrp && Number(mrp) > 0 && Number(price) > 0 ? `(${Math.round((Number(price) / Number(mrp)) * 100)}% off)` : "(0% off)"}*
                       </label>
-                      <div className="flex items-center justify-center rounded border border-[#C9CED3] focus-within:border-[#4E5DE0] bg-white overflow-hidden">
+                      <div className="flex items-center justify-center border border-[#C9CED3] focus-within:border-[#4E5DE0] bg-white overflow-hidden">
                         <div className="flex items-center justify-center self-stretch border-r border-[#C9CED3] bg-[#F4F6FA]">
                           <div className="px-3 text-sm">₹</div>
                         </div>
                         <input
-                          className="border outline-none border-transparent pl-4 pr-4 py-3.5 w-full text-sm rounded bg-white"
+                          className="border outline-none border-transparent pl-4 pr-4 py-3.5 w-full text-sm bg-white"
                           name="price"
                           type="number"
                           placeholder="Enter discount amount"
@@ -192,7 +199,7 @@ export function CreateCourseView() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-4 p-4 bg-indigo-50 rounded-lg">
+                  <div className="mt-4 p-4 bg-indigo-50 ">
                     <p className="text-sm font-semibold text-indigo-900">
                       Final Price: ₹ {Math.max(0, Number(mrp) - Number(price)).toLocaleString()}
                     </p>
@@ -207,7 +214,7 @@ export function CreateCourseView() {
                         className="sr-only"
                       />
                       <div
-                        className={`w-4 h-4 rounded flex items-center justify-center border ${
+                        className={`w-4 h-4 flex items-center justify-center border ${
                           passFees ? "bg-[#4E5DE0] border-[#4E5DE0]" : "bg-white border-[#C9CED3]"
                         }`}
                       >
@@ -231,7 +238,7 @@ export function CreateCourseView() {
             </label>
           </div>
 
-          <div className="flex items-start gap-3 px-4 py-2 bg-[#F4F6FA] rounded">
+          <div className="flex items-start gap-3 px-4 py-2 bg-[#F4F6FA] ">
             <Lightbulb size={16} className="text-[#152561] flex-shrink-0 mt-0.5" />
             <p className="text-xs text-[#0F1013]">
               You can add multiple pricing options and access advanced plans later under course pricing.
@@ -244,28 +251,30 @@ export function CreateCourseView() {
           <button
             type="button"
             onClick={() => setShowQuitModal(true)}
-            className="inline-flex items-center gap-2 rounded-[33px] border border-[#C9CED3] bg-white px-5 h-10 text-sm font-semibold text-[#393F41] hover:bg-[#F7F9FA]"
+            className="inline-flex items-center gap-2 border border-[#C9CED3] bg-white px-5 h-10 text-sm font-semibold text-[#393F41] hover:bg-[#F7F9FA]"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="newCourseSubmitBtn inline-flex items-center gap-2 rounded-[33px] bg-[#4E5DE0] px-6 h-10 text-sm font-semibold text-white hover:bg-[#4350C8]"
+            className="newCourseSubmitBtn inline-flex items-center gap-2 bg-[#4E5DE0] px-6 h-10 text-sm font-semibold text-white hover:bg-[#4350C8]"
           >
             Next
           </button>
         </div>
       </form>
 
+      {showToast && <Toast message="Course saved successfully!" onClose={() => setShowToast(false)} />}
+      
       {/* QUIT MODAL */}
       {showQuitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-lg rounded-[22px] bg-white shadow-xl overflow-hidden">
+          <div className="w-full max-w-lg bg-white shadow-xl overflow-hidden">
             <div className="sticky top-0 flex items-center p-4 border-b border-[#ECEEEF] bg-white">
               <div className="flex-grow">
                 <h4 className="text-base text-[#393F41] font-semibold">Do you want to quit creating a course?</h4>
               </div>
-              <div className="ml-auto bg-[#F4F6FA] rounded-full px-3 py-2">
+              <div className="ml-auto bg-[#F4F6FA] px-3 py-2">
                 <X size={14} className="cursor-pointer text-[#393F41]" onClick={() => setShowQuitModal(false)} />
               </div>
             </div>
@@ -279,14 +288,14 @@ export function CreateCourseView() {
                 <button
                   type="button"
                   onClick={() => setShowQuitModal(false)}
-                  className="w-[100px] mr-4 whitespace-nowrap rounded-[33px] border border-[#C9CED3] bg-white px-4 h-10 text-sm font-semibold text-[#393F41]"
+                  className="w-[100px] mr-4 whitespace-nowrap border border-[#C9CED3] bg-white px-4 h-10 text-sm font-semibold text-[#393F41]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleQuit}
-                  className="w-[160px] whitespace-nowrap rounded-[33px] bg-[#4E5DE0] px-4 h-10 text-sm font-semibold text-white"
+                  className="w-[160px] whitespace-nowrap bg-[#4E5DE0] px-4 h-10 text-sm font-semibold text-white"
                 >
                   Continue creating
                 </button>
@@ -299,7 +308,7 @@ export function CreateCourseView() {
       {/* AI GENERATED CONTENT PREVIEW MODAL */}
       {isAiPreviewOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-[600px] rounded-[22px] bg-white shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="w-full max-w-[600px] bg-white shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="flex items-center p-5 shadow-sm bg-white">
               <div className="flex-grow">
                 <div className="text-base text-[#393F41] font-semibold">AI generated content preview</div>
@@ -317,7 +326,7 @@ export function CreateCourseView() {
                   <RefreshCw size={18} className="text-[#152561] cursor-pointer" />
                 </div>
                 <textarea
-                  className="w-full resize-none outline-none border border-[#ECEEEF] rounded-lg p-3 text-sm text-[#393F41] min-h-[80px]"
+                  className="w-full resize-none outline-none border border-[#ECEEEF] p-3 text-sm text-[#393F41] min-h-[80px]"
                   rows={3}
                   placeholder="AI generated description..."
                 />
@@ -329,7 +338,7 @@ export function CreateCourseView() {
                   Tagline <RefreshCw size={18} className="text-[#152561] cursor-pointer" />
                 </div>
                 <textarea
-                  className="w-full resize-none outline-none border border-[#ECEEEF] rounded-lg p-3 text-sm text-[#393F41] min-h-[60px]"
+                  className="w-full resize-none outline-none border border-[#ECEEEF] p-3 text-sm text-[#393F41] min-h-[60px]"
                   rows={2}
                   placeholder="AI generated tagline..."
                 />
@@ -341,7 +350,7 @@ export function CreateCourseView() {
                   Key highlights <RefreshCw size={18} className="text-[#152561] cursor-pointer" />
                 </div>
                 <textarea
-                  className="w-full resize-none outline-none border border-[#ECEEEF] rounded-lg p-3 text-sm text-[#393F41] min-h-[60px]"
+                  className="w-full resize-none outline-none border border-[#ECEEEF] p-3 text-sm text-[#393F41] min-h-[60px]"
                   rows={2}
                   placeholder="AI generated key highlights..."
                 />
@@ -353,7 +362,7 @@ export function CreateCourseView() {
                   What you will learn <RefreshCw size={18} className="text-[#152561] cursor-pointer" />
                 </div>
                 <textarea
-                  className="w-full resize-none outline-none border border-[#ECEEEF] rounded-lg p-3 text-sm text-[#393F41] min-h-[60px]"
+                  className="w-full resize-none outline-none border border-[#ECEEEF] p-3 text-sm text-[#393F41] min-h-[60px]"
                   rows={2}
                   placeholder="AI generated learning outcomes..."
                 />
@@ -365,7 +374,7 @@ export function CreateCourseView() {
                   Meta description <RefreshCw size={18} className="text-[#152561] cursor-pointer" />
                 </div>
                 <textarea
-                  className="w-full resize-none outline-none border border-[#ECEEEF] rounded-lg p-3 text-sm text-[#393F41] min-h-[60px]"
+                  className="w-full resize-none outline-none border border-[#ECEEEF] p-3 text-sm text-[#393F41] min-h-[60px]"
                   rows={2}
                   placeholder="AI generated meta description..."
                 />
@@ -378,7 +387,7 @@ export function CreateCourseView() {
                 </div>
                 <input
                   type="text"
-                  className="w-full outline-none border border-[#ECEEEF] rounded-lg px-3 py-2 text-sm text-[#393F41]"
+                  className="w-full outline-none border border-[#ECEEEF] px-3 py-2 text-sm text-[#393F41]"
                   placeholder="Enter keywords..."
                 />
               </div>
@@ -395,7 +404,7 @@ export function CreateCourseView() {
                   Cancel
                 </button>
                 <button
-                  className="relative inline-flex items-center gap-2 rounded-full bg-white border border-[#ECEEEF] font-semibold whitespace-nowrap shadow-sm px-4 h-10 text-sm"
+                  className="relative inline-flex items-center gap-2 bg-white border border-[#ECEEEF] font-semibold whitespace-nowrap shadow-sm px-4 h-10 text-sm"
                   type="button"
                   onClick={() => setIsAiPreviewOpen(false)}
                 >

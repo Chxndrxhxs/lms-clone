@@ -61,6 +61,7 @@ class CourseSerializer(serializers.ModelSerializer):
     pricing = PricingSerializer(required=False)
     cover = serializers.CharField(required=False, allow_blank=True)
     createdAt = serializers.SerializerMethodField()
+    updatedAt = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -76,6 +77,22 @@ class CourseSerializer(serializers.ModelSerializer):
             "pricing",
             "chapters",
             "createdAt",
+            "updatedAt",
+            "category",
+            "featuredPriority",
+            "taxRate",
+            "courseUrl",
+            "canonicalUrl",
+            "seoTitle",
+            "seoDescription",
+            "showValidity",
+            "accessChannels",
+            "offlineUsage",
+            "showCurriculumInfo",
+            "allowBookmarks",
+            "welcomeEmailEnabled",
+            "welcomeEmailSubject",
+            "welcomeEmailContent",
         ]
         extra_kwargs = {
             "description": {"required": False, "allow_blank": True},
@@ -83,6 +100,21 @@ class CourseSerializer(serializers.ModelSerializer):
             "tags": {"required": False, "allow_blank": True},
             "instructor": {"required": False, "allow_blank": True},
             "language": {"required": False, "allow_blank": True},
+            "category": {"required": False, "allow_blank": True},
+            "featuredPriority": {"source": "featured_priority", "required": False},
+            "taxRate": {"source": "tax_rate", "required": False, "allow_blank": True},
+            "courseUrl": {"source": "course_url", "required": False, "allow_blank": True},
+            "canonicalUrl": {"source": "canonical_url", "required": False, "allow_blank": True},
+            "seoTitle": {"source": "seo_title", "required": False, "allow_blank": True},
+            "seoDescription": {"source": "seo_description", "required": False, "allow_blank": True},
+            "showValidity": {"source": "show_validity", "required": False},
+            "accessChannels": {"source": "access_channels", "required": False},
+            "offlineUsage": {"source": "offline_usage", "required": False},
+            "showCurriculumInfo": {"source": "show_curriculum_info", "required": False},
+            "allowBookmarks": {"source": "allow_bookmarks", "required": False},
+            "welcomeEmailEnabled": {"source": "welcome_email_enabled", "required": False},
+            "welcomeEmailSubject": {"source": "welcome_email_subject", "required": False, "allow_blank": True},
+            "welcomeEmailContent": {"source": "welcome_email_content", "required": False, "allow_blank": True},
         }
 
     def to_representation(self, instance):
@@ -97,6 +129,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_createdAt(self, obj):
         return epoch_ms(obj.created_at)
+
+    def get_updatedAt(self, obj):
+        return epoch_ms(obj.updated_at)
 
     def _apply_pricing(self, instance, pricing):
         instance.plan_type = pricing.get("planType", instance.plan_type)
